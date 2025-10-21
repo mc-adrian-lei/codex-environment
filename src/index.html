@@ -19,7 +19,6 @@
                 </nav>
             </div>
         </header>
-
         <div class="codex-container">
             <!-- Component Library Sidebar -->
             <aside id="component-library" class="sidebar">
@@ -39,7 +38,6 @@
                     </div>
                 </div>
             </aside>
-
             <!-- Main Work Area -->
             <main id="work-area" class="main-content">
                 <section class="welcome-section">
@@ -66,49 +64,109 @@
                     </div>
                 </section>
 
+                <!-- Phase 3 Research Text Input Panel -->
+                <section class="input-panel">
+                    <h2>Research Text Entry</h2>
+                    <p>Submit research notes and observations for Phase 3 data collection</p>
+                    <div class="input-container">
+                        <label for="research-input">Enter Research Text:</label>
+                        <textarea 
+                            id="research-input" 
+                            class="research-text-input" 
+                            placeholder="Enter your research notes here..."
+                            rows="6"
+                            aria-label="Research text input field"
+                        ></textarea>
+                        <div class="button-group">
+                            <button 
+                                id="submit-research-btn" 
+                                class="submit-btn"
+                                onclick="handleResearchSubmit()"
+                            >
+                                Submit Research Text
+                            </button>
+                            <button 
+                                id="clear-input-btn" 
+                                class="clear-btn"
+                                onclick="clearResearchInput()"
+                            >
+                                Clear
+                            </button>
+                        </div>
+                        <div id="submission-status" class="status-message" aria-live="polite"></div>
+                    </div>
+                </section>
+
                 <section class="links-section">
                     <h2>Project Links</h2>
                     <div class="link-cards">
-                        <a href="https://github.com/mc-adrian-lei/mc-adrian-lei-github.io" class="link-card" target="_blank">
+                        <a class="link-card" href="https://github.com/mc-adrian-lei/mc-adrian-lei-github.io" target="_blank">
                             <h3>Main Research Repository</h3>
                             <p>mc-adrian-lei-github.io</p>
                         </a>
-                        <a href="https://mc-adrian-lei.github.io/mc-adrian-lei-github.io/" class="link-card" target="_blank">
+                        <a class="link-card" href="https://mc-adrian-lei.github.io/mc-adrian-lei-github.io/" target="_blank">
                             <h3>Live Deployment</h3>
                             <p>32 Aspect Dev Self Clock</p>
                         </a>
                     </div>
                 </section>
             </main>
-
-            <!-- Timeline/History Panel -->
-            <aside id="timeline-panel" class="sidebar right">
-                <h2>Timeline</h2>
-                <div class="timeline-content">
-                    <div class="timeline-item">
-                        <span class="timeline-date">Oct 21, 2025</span>
-                        <p class="timeline-event">Repository initialization</p>
-                    </div>
-                    <div class="timeline-item">
-                        <span class="timeline-date">Oct 21, 2025</span>
-                        <p class="timeline-event">Comprehensive README created</p>
-                    </div>
-                    <div class="timeline-item">
-                        <span class="timeline-date">Oct 21, 2025</span>
-                        <p class="timeline-event">Base structure setup</p>
-                    </div>
-                </div>
-            </aside>
         </div>
-
-        <footer class="codex-footer">
-            <p>&copy; 2025 Codex Environment - Research-Driven UI Framework Development</p>
-            <p>Supporting: Cognitive Mapping & Mind–Body–Energy Systems Research</p>
-        </footer>
     </div>
 
-    <!-- Scripts -->
-    <script src="scripts/main.js"></script>
-    <script src="automation/git-helpers.js"></script>
+    <script>
+        // Placeholder JavaScript handlers for Phase 3 research text entry
+        // These will be connected to API/webhook endpoints in future iterations
+        
+        function handleResearchSubmit() {
+            const inputField = document.getElementById('research-input');
+            const statusDiv = document.getElementById('submission-status');
+            const textContent = inputField.value.trim();
+            
+            if (!textContent) {
+                statusDiv.textContent = 'Please enter research text before submitting.';
+                statusDiv.className = 'status-message error';
+                return;
+            }
+            
+            // Placeholder for future API/webhook integration
+            console.log('Research text submitted:', textContent);
+            
+            // TODO: Implement API call to backend webhook
+            // Example: fetch('/api/research-submit', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ text: textContent, timestamp: new Date().toISOString() })
+            // });
+            
+            statusDiv.textContent = 'Research text queued for submission (API integration pending).';
+            statusDiv.className = 'status-message success';
+            
+            // Clear input after successful submission
+            setTimeout(() => {
+                inputField.value = '';
+                statusDiv.textContent = '';
+            }, 3000);
+        }
+        
+        function clearResearchInput() {
+            const inputField = document.getElementById('research-input');
+            const statusDiv = document.getElementById('submission-status');
+            inputField.value = '';
+            statusDiv.textContent = '';
+            statusDiv.className = 'status-message';
+        }
+        
+        // Allow Enter key submission (with Ctrl/Cmd modifier to prevent accidental submissions)
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputField = document.getElementById('research-input');
+            inputField.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                    e.preventDefault();
+                    handleResearchSubmit();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
