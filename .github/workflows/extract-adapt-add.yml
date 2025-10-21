@@ -1,14 +1,9 @@
 name: Codex Extract-Adapt-Add
+
 on:
-  push:
-    paths:
-      - 'docs/research-notes.md'
-      - 'templates/prompt-examples.md'
-      - 'meta/ROADMAP.md'
-      - 'meta/Living-Codex.json'
-      - 'src/**/*.py'
-      - 'src/**/*.js'
-      - 'src/**/*.md'
+  repository_dispatch:
+    types: [codex extract-adapt-add]
+  workflow_dispatch:
 
 jobs:
   extract-adapt-add:
@@ -16,6 +11,15 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull Latest Changes
+        run: |
+          git config --local user.name "Codex Action Bot"
+          git config --local user.email "codex-bot@example.com"
+          git pull origin main
 
       - name: Scan for New Codex Artifacts
         run: |
@@ -28,28 +32,35 @@ jobs:
             echo "Found Living-Codex.json"
             cat meta/Living-Codex.json
           fi
+          if [ -f templates/prompt-examples.md ]; then
+            echo "Found prompt-examples.md"
+            cat templates/prompt-examples.md
+          fi
           if [ -f src/phi-node.py ]; then
             echo "Found phi-node.py"
             cat src/phi-node.py
           fi
 
-      - name: Format and Stage Artifacts
+      - name: Adapt and Format Artifacts
         run: |
-          # (This step can be expanded for adaptation/cleanup)
-          echo "Formatting and staging Codex artifacts..."
-          # Custom formatting script can go here
+          echo "Formatting and adapting Codex artifacts..."
+          # Custom formatting and adaptation logic
+          # This step can be expanded for adaptation/cleanup
+          # Examples: normalize formatting, extract metadata, update indices
 
-      - name: Commit Codex Content Update
+      - name: Commit and Push Changes
         run: |
           git config --local user.name "Codex Action Bot"
           git config --local user.email "codex-bot@example.com"
-          git add docs/research-notes.md meta/Living-Codex.json src/phi-node.py
-          git commit -m "Codex auto-import: /codex extract-adapt-add artifacts"
-          git push
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Codex auto-import: extract-adapt-add artifacts [repository_dispatch]"
+            git push origin main
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Success Banner
-        run: echo "Codex extract-adapt-add workflow completed and pushed new research artifacts!"
-
-# Optional: Add outputs, PR creation, or notifications as needed
+        run: echo "✅ Codex extract-adapt-add workflow completed successfully!"
